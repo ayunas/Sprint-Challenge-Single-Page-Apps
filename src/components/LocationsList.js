@@ -19,21 +19,24 @@ background-color: lightskyblue;
 
 export default function LocationsList() {
     const [locations, setLocations] = useState([]);
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
-        axios.get('https://rickandmortyapi.com/api/location/')
-            .then(res => {
-                console.log(res.data);
-                setLocations(res.data.results);
-            })
-            .catch(err => console.error(err));
-    }, [])
+        if (page > 0 && page < 4) {
+            axios.get(`https://rickandmortyapi.com/api/location/?page=${page}`)
+                .then(res => {
+                    console.log(res.data);
+                    setLocations(res.data.results);
+                })
+                .catch(err => console.error(err));
+        }
+    }, [page])
 
     return (
         <>
             <div className="buttons">
-                <button onClick={console.log('clicked')}>Previous</button>
-                <button onClick={console.log('clicked')}>Next</button>
+                <button onClick={() => setPage(page - 1)}>Previous</button>
+                <button onClick={() => setPage(page + 1)}>Next</button>
             </div><br />
             <section className='location-list grid-view'>
 

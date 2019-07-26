@@ -18,22 +18,24 @@ export default function CharacterList() {
   const [page, setPage] = useState(1)
 
   useEffect(() => {
-    axios.get('https://rickandmortyapi.com/api/character/')
-      .then(res => {
-        console.log(res.data.results);
-        setCharacters(res.data.results);
-      })
-      .catch(err => console.log(err))
+    if (page > 0 && page < 25) {
+      axios.get(`https://rickandmortyapi.com/api/character/?page=${page}`)
+        .then(res => {
+          console.log(res.data.results);
+          setCharacters(res.data.results);
+        })
+        .catch(err => console.log(err))
+    }
 
     // TODO: Add AJAX/API Request here - must run in `useEffect`
     //  Important: verify the 2nd `useEffect` parameter: the dependancies array!
-  }, [])
+  }, [page])
 
   return (
     <>
       <div className="buttons">
-        <button onClick={console.log('clicked')}>Previous</button>
-        <button onClick={console.log('clicked')}>Next</button>
+        <button onClick={() => setPage(page - 1)}>Previous</button>
+        <button onClick={() => setPage(page + 1)}>Next</button>
       </div>
       <section className='character-list grid-view'>
         {characters.map(char => (
